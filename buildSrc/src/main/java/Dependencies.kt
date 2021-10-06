@@ -40,7 +40,7 @@ object Deps {
     const val junit = "junit:junit:4.13.2"
     const val android_material = "com.google.android.material:material:1.4.0"
     const val multidex = "androidx.multidex:multidex:2.0.1"
-
+    const val legacy_support = "androidx.legacy:legacy-support-v4:1.0.0"
     // ViewModel
     const val viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     // LiveData
@@ -89,5 +89,4 @@ object Deps {
 
     const val nav_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_version}"
     const val nav_ui = "androidx.navigation:navigation-ui-ktx:${Versions.nav_version}"
-
 }

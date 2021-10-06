@@ -55,9 +55,9 @@ dependencies {
     implementation Deps.app_compat
     implementation Deps.constraint_layout
     implementation Deps.lifecycle_extension
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation Deps.legacy_support
+    implementation Deps.livedata
+    implementation Deps.viewmodel
     testImplementation Deps.junit
     implementation Deps.android_material
     implementation Deps.multidex

@@ -22,9 +22,9 @@ class PhotoRepositoryImpl @Inject constructor(
         val result = photoApiService.searchPhoto(
             query = query,
             page = page,
-            limit = limit,
-            orderBy = orderBy,
-            color = color
+//            limit = limit,
+//            orderBy = orderBy,
+//            color = color
         )
         if (result.isSuccessful) {
             val remoteMapper = PhotoItemRemoteMapper()

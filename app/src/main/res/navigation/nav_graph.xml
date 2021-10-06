@@ -9,17 +9,58 @@
         android:id="@+id/mainFragment"
         android:name="com.envious.searchphoto.ui.main.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_searchResultFragment"
+            app:destination="@id/searchResultFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            />
+    </fragment>
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.envious.searchphoto.ui.detail.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="urlPhoto"
+            app:argType="string" />
+    </fragment>
+
     <fragment
         android:id="@+id/searchResultFragment"
         android:name="com.envious.searchphoto.ui.searchresult.SearchResultFragment"
         android:label="search_result_fragment"
-        tools:layout="@layout/search_result_fragment" />
+        tools:layout="@layout/search_result_fragment" >
+        <action
+            android:id="@+id/action_searchResultFragment_to_advancedSearchFragment"
+            app:destination="@id/advancedSearchFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"
+            />
+        <action
+            android:id="@+id/action_searchResultFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+        <argument
+            android:name="product_id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/advancedSearchFragment"
         android:name="com.envious.searchphoto.ui.advancedsearch.AdvancedSearchFragment"

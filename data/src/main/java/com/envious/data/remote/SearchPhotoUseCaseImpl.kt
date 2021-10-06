@@ -4,8 +4,11 @@ import com.envious.domain.model.Photo
 import com.envious.domain.repository.PhotoRepository
 import com.envious.domain.usecase.SearchPhotoUseCase
 import com.envious.domain.util.Result
+import javax.inject.Inject
 
-class SearchPhotoUseCaseImpl(private val repository: PhotoRepository) : SearchPhotoUseCase {
+class SearchPhotoUseCaseImpl @Inject constructor(
+    private val repository: PhotoRepository
+) : SearchPhotoUseCase {
 
     override suspend fun invoke(
         query: String,

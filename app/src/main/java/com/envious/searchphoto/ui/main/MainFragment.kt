@@ -1,22 +1,28 @@
 package com.envious.searchphoto.ui.main
 
-import com.envious.searchphoto.util.EndlessRecyclerViewScrollListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.envious.searchphoto.R
 import com.envious.searchphoto.base.BaseFragment
 import com.envious.searchphoto.databinding.MainFragmentBinding
 import com.envious.searchphoto.ui.adapter.ItemAdapter
+import com.envious.searchphoto.ui.searchresult.SearchResultFragment
+import com.envious.searchphoto.util.Effect
+import com.envious.searchphoto.util.EndlessRecyclerViewScrollListener
+import com.envious.searchphoto.util.Intent
+import com.envious.searchphoto.util.State
+import com.envious.searchphoto.util.ViewState
 
-class MainFragment : BaseFragment<MainViewModel.Intent,
-    MainViewModel.State,
-    MainViewModel.Effect,
+class MainFragment : BaseFragment<Intent,
+    State,
+    Effect,
     MainViewModel>() {
 
     companion object {
@@ -40,9 +46,15 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
         setupRecyclerView()
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         dispatch(
-            MainViewModel.Intent.GetCollection
+            Intent.GetCollection
         )
+
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpButtonSearch(view)
     }
 
     override fun onDestroyView() {
@@ -63,11 +75,11 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
                 override fun onLoadMore(
                     page: Int,
                     totalItemsCount: Int,
-                    view: RecyclerView?
+                    view: RecyclerView?,
                 ) {
                     currentPage = page + 1
                     dispatch(
-                        MainViewModel.Intent.LoadNext(currentPage)
+                        Intent.LoadNext(currentPage)
                     )
                 }
             }
@@ -78,7 +90,7 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
     override val layoutResourceId: Int
         get() = R.layout.main_fragment
 
-    override fun invalidate(state: MainViewModel.State) {
+    override fun invalidate(state: State) {
         with(binding) {
             pgProgressList.visibility = if (state.showLoading) View.VISIBLE else View.GONE
             errorView.visibility = if (state.showError) {
@@ -89,7 +101,7 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
         }
 
         when (state.viewState) {
-            MainViewModel.ViewState.EmptyList -> {
+            ViewState.EmptyList -> {
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
@@ -102,7 +114,7 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
                     recyclerview.visibility = View.GONE
                 }
             }
-            MainViewModel.ViewState.ErrorFirstInit -> {
+            ViewState.ErrorFirstInit -> {
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
@@ -112,19 +124,19 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
                     recyclerview.visibility = View.GONE
                 }
             }
-            MainViewModel.ViewState.ErrorLoadMore -> {
+            ViewState.ErrorLoadMore -> {
                 with(binding) {
                     recyclerview.visibility = View.VISIBLE
                 }
             }
-            MainViewModel.ViewState.Idle -> {}
-            MainViewModel.ViewState.SuccessFirstInit -> {
+            ViewState.Idle -> {}
+            ViewState.SuccessFirstInit -> {
                 with(binding) {
                     recyclerview.visibility = View.VISIBLE
                     adapter.setList(state.listPhoto)
                 }
             }
-            MainViewModel.ViewState.SuccessLoadMore -> {
+            ViewState.SuccessLoadMore -> {
                 with(binding) {
                     recyclerview.visibility = View.VISIBLE
                     adapter.addData(state.listPhoto)
@@ -133,11 +145,24 @@ class MainFragment : BaseFragment<MainViewModel.Intent,
         }
     }
 
+    fun setUpButtonSearch(view: View) {
+
+        with(binding) {
+            buttonSearch.setOnClickListener {
+                if (!textSearch.text.isNullOrEmpty()) {
+                    val bundle = Bundle()
+                    bundle.putString(SearchResultFragment.EXTRA_QUERY, textSearch.text.toString())
+                    Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_searchResultFragment, bundle)
+                }
+            }
+        }
+    }
+
     override fun provideViewModel() = MainViewModel::class.java
 
-    override fun renderEffect(effect: MainViewModel.Effect) {
+    override fun renderEffect(effect: Effect) {
         when (effect) {
-            is MainViewModel.Effect.ShowToast -> {
+            is Effect.ShowToast -> {
                 Toast.makeText(
                     requireContext(),
                     effect.message,
