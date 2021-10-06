@@ -1,0 +1,113 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.envious.searchphoto"
+        minSdk 21
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    //module dependency
+    implementation project(":domain")
+    implementation project(":data")
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation Deps.kotlin
+
+    implementation Deps.core_ktx
+    implementation Deps.app_compat
+    implementation Deps.constraint_layout
+    implementation Deps.lifecycle_extension
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    testImplementation Deps.junit
+    implementation Deps.android_material
+    implementation Deps.multidex
+
+    // ViewModel
+    implementation Deps.viewmodel
+    // LiveData
+    implementation Deps.livedata
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation Deps.runtime_ktxt
+
+    // livedata_core
+    implementation Deps.livedata_core
+
+    // retrofit2
+    implementation Deps.retrofit
+    implementation Deps.retrofit_moshi
+    implementation Deps.retrofit_logging
+
+    // moshi
+    implementation Deps.moshi
+    implementation Deps.moshi_converter
+    kapt Deps.moshi_codegen
+
+    // coroutines
+    implementation Deps.coroutine_core
+    implementation Deps.coroutine_android
+
+    // dagger hilt
+    implementation Deps.dagger_hilt
+    kapt Deps.dagger_hilt_compiler
+    implementation Deps.dagger_hilt_view_model
+    kapt Deps.hilt_compiler
+
+    //recyclerview
+    implementation Deps.recyclerview
+
+    //navHost
+    implementation Deps.nav_fragment
+    implementation Deps.nav_ui
+
+    //card view
+    implementation Deps.card_view
+
+    androidTestImplementation Deps.junit_test
+    androidTestImplementation Deps.espresso
+
+    // optional - Test helpers for LiveData
+    testImplementation Deps.core_test
+
+    testImplementation Deps.coroutine_test
+    testImplementation Deps.mockk
+}

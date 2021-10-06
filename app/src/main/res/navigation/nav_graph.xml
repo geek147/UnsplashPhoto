@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.envious.searchphoto.ui.main.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.envious.searchphoto.ui.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.envious.searchphoto.ui.searchresult.SearchResultFragment"
+        android:label="search_result_fragment"
+        tools:layout="@layout/search_result_fragment" />
+    <fragment
+        android:id="@+id/advancedSearchFragment"
+        android:name="com.envious.searchphoto.ui.advancedsearch.AdvancedSearchFragment"
+        android:label="advanced_search_fragment"
+        tools:layout="@layout/advanced_search_fragment" />
+</navigation>

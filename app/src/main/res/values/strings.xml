@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SearchPhoto</string>
+    <string name="error_state_title">Sorry</string>
+    <string name="error_state_message">Try again later or check your connection</string>
+    <string name="username">Username</string>
+    <string name="empty_state_title">Oops</string>
+    <string name="empty_state_message">Watch item not found</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
