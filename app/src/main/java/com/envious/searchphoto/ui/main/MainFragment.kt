@@ -145,7 +145,7 @@ class MainFragment : BaseFragment<Intent,
         }
     }
 
-    fun setUpButtonSearch(view: View) {
+    private fun setUpButtonSearch(view: View) {
 
         with(binding) {
             buttonSearch.setOnClickListener {

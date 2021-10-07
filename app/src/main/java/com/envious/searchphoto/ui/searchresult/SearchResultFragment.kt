@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.envious.searchphoto.R
@@ -64,6 +65,11 @@ class SearchResultFragment : BaseFragment<Intent,
             Intent.SearchPhoto(query)
         )
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpButtonSettings(view)
     }
 
     override fun onDestroyView() {
@@ -164,6 +170,14 @@ class SearchResultFragment : BaseFragment<Intent,
                     effect.message,
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+    }
+
+    private fun setUpButtonSettings(view: View) {
+        with(binding) {
+            buttonAdvanced.setOnClickListener {
+                Navigation.findNavController(view).navigate(R.id.action_searchResultFragment_to_advancedSearchFragment)
             }
         }
     }

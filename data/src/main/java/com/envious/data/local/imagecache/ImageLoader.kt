@@ -3,9 +3,10 @@ package com.envious.data.local.imagecache
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
+import android.util.Log
 import android.util.LruCache
 import android.widget.ImageView
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 import java.util.Collections.synchronizedMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -37,6 +38,7 @@ class ImageLoader(context: Context) {
     }
 
     companion object {
+        val TAG = this::class.simpleName
 
         private var INSTANCE: ImageLoader? = null
 
@@ -101,7 +103,11 @@ class ImageLoader(context: Context) {
 
     inner class DisplayBitmap(private var imageRequest: ImageRequest) : Runnable {
         override fun run() {
-            if (!isImageViewReused(imageRequest)) loadImageIntoImageView(imageRequest.imageView, checkImageInCache(imageRequest.imgUrl), imageRequest.imgUrl)
+            try {
+                if (!isImageViewReused(imageRequest)) loadImageIntoImageView(imageRequest.imageView, checkImageInCache(imageRequest.imgUrl), imageRequest.imgUrl)
+            } catch (e: Exception) {
+                Log.d(TAG, "display bitmap exception: $e")
+            }
         }
     }
 

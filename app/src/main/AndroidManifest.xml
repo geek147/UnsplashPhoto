@@ -3,7 +3,6 @@
     package="com.envious.searchphoto">
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name=".SearchPhotoApplication"
-        android:theme="@style/Theme.SearchPhoto">
+        android:theme="@style/Theme.SearchPhoto.NoActionBar">
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
