@@ -1,9 +1,11 @@
-package com.envious.searchphoto.ui.searchresult
+package com.envious.searchphoto.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.envious.data.dispatchers.CoroutineDispatchers
+import com.envious.data.util.Constants
 import com.envious.data.util.Filter
 import com.envious.data.util.Sort
+import com.envious.domain.usecase.GetCollectionsUseCase
 import com.envious.domain.usecase.SearchPhotoUseCase
 import com.envious.domain.util.Result
 import com.envious.searchphoto.base.BaseViewModel
@@ -17,18 +19,124 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchResultViewModel @Inject constructor(
+class SharedViewModel @Inject constructor(
+    private val getCollectionsUseCase: GetCollectionsUseCase,
     private val searchPhotoUseCase: SearchPhotoUseCase,
     private val ioDispatchers: CoroutineDispatchers
 ) : BaseViewModel<Intent, State, Effect>(State()) {
 
     override fun onIntentReceived(intent: Intent) {
         when (intent) {
-            is Intent.LoadNext -> {
-                loadMoreUser(intent.page)
+            is Intent.LoadNextCollection -> {
+                loadMoreCollection(intent.page)
+            }
+            is Intent.GetCollection -> {
+                getCollection()
+            }
+            is Intent.LoadNextSearch -> {
+                loadMoreSearch(intent.page)
             }
             is Intent.SearchPhoto -> {
                 searchPhotos(intent.query)
+            }
+        }
+    }
+
+    private fun getCollection() {
+        setState {
+            copy(
+                showLoading = true,
+                showError = false
+            )
+        }
+
+        viewModelScope.launch {
+            when (
+                val result = withContext(ioDispatchers.io) {
+                    getCollectionsUseCase(
+                        id = Constants.COLLECTION_DEFAULT_ID,
+                        limit = 10,
+                        page = 1,
+                        orientation = Constants.COLLECTION_DEFAULT_ORIENTATION
+                    )
+                }
+            ) {
+                is Result.Success -> {
+                    if (result.data.isEmpty()) {
+                        setState {
+                            copy(
+                                listPhoto = emptyList(),
+                                showLoading = false,
+                                showError = false,
+                                viewState = ViewState.EmptyList
+                            )
+                        }
+                    } else {
+                        setState {
+                            copy(
+                                listPhoto = result.data,
+                                showLoading = false,
+                                showError = false,
+                                viewState = ViewState.SuccessFirstInit
+                            )
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setState {
+                        copy(
+                            listPhoto = emptyList(),
+                            showLoading = false,
+                            showError = true,
+                            viewState = ViewState.ErrorFirstInit
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadMoreCollection(page: Int) {
+        setState {
+            copy(
+                showLoading = true,
+                showError = false
+            )
+        }
+
+        viewModelScope.launch {
+            when (
+                val result = withContext(ioDispatchers.io) {
+                    getCollectionsUseCase(
+                        id = Constants.COLLECTION_DEFAULT_ID,
+                        limit = 10,
+                        page = page,
+                        orientation = Constants.COLLECTION_DEFAULT_ORIENTATION
+                    )
+                }
+            ) {
+                is Result.Success -> {
+                    setState {
+                        copy(
+                            listPhoto = result.data,
+                            showLoading = false,
+                            showError = false,
+                            viewState = ViewState.SuccessLoadMore
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setState {
+                        copy(
+                            listPhoto = emptyList(),
+                            showLoading = false,
+                            showError = true,
+                            viewState = ViewState.ErrorLoadMore
+                        )
+                    }
+                }
             }
         }
     }
@@ -90,7 +198,7 @@ class SearchResultViewModel @Inject constructor(
         }
     }
 
-    private fun loadMoreUser(page: Int) {
+    private fun loadMoreSearch(page: Int) {
         setState {
             copy(
                 showLoading = true,

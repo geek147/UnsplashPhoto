@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +20,12 @@ import com.envious.searchphoto.util.EndlessRecyclerViewScrollListener
 import com.envious.searchphoto.util.Intent
 import com.envious.searchphoto.util.State
 import com.envious.searchphoto.util.ViewState
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SearchResultFragment : BaseFragment<Intent,
     State,
-    Effect,
-    SearchResultViewModel>() {
+    Effect>() {
 
     companion object {
         val TAG = this::class.simpleName
@@ -60,15 +63,25 @@ class SearchResultFragment : BaseFragment<Intent,
         setupRecyclerView()
         query = arguments?.getString(EXTRA_QUERY).orEmpty()
         binding.textSearchResult.text = "Search Result : $query"
-        viewModel = ViewModelProvider(requireActivity())[SearchResultViewModel::class.java]
-        dispatch(
-            Intent.SearchPhoto(query)
-        )
+        viewModel.onIntentReceived(Intent.SearchPhoto(query))
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.state.observe(viewLifecycleOwner) {
+            invalidate(it)
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.effect.collect { effect ->
+                    effect?.getContentIfNotHandled()?.let {
+                        renderEffect(it)
+                    }
+                }
+            }
+        }
         setUpButtonSettings(view)
     }
 
@@ -93,9 +106,7 @@ class SearchResultFragment : BaseFragment<Intent,
                     view: RecyclerView?,
                 ) {
                     currentPage = page + 1
-                    dispatch(
-                        Intent.LoadNext(currentPage)
-                    )
+                    viewModel.onIntentReceived(Intent.LoadNextSearch(currentPage))
                 }
             }
             recyclerview.addOnScrollListener(scrollListener)
@@ -159,8 +170,6 @@ class SearchResultFragment : BaseFragment<Intent,
             }
         }
     }
-
-    override fun provideViewModel() = SearchResultViewModel::class.java
 
     override fun renderEffect(effect: Effect) {
         when (effect) {

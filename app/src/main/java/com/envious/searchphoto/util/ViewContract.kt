@@ -5,7 +5,8 @@ import com.envious.domain.model.Photo
 sealed class Intent {
     object GetCollection : Intent()
     data class SearchPhoto(val query: String) : Intent()
-    data class LoadNext(val page: Int) : Intent()
+    data class LoadNextSearch(val page: Int) : Intent()
+    data class LoadNextCollection(val page: Int) : Intent()
 }
 
 data class State(
