@@ -1,9 +1,14 @@
 package com.envious.searchphoto.ui.viewmodel
 
+import android.content.SharedPreferences
 import androidx.lifecycle.viewModelScope
 import com.envious.data.dispatchers.CoroutineDispatchers
 import com.envious.data.util.Constants
+import com.envious.data.util.Constants.SHARED_KEY_COLOR
+import com.envious.data.util.Constants.SHARED_KEY_ORIENTATION
+import com.envious.data.util.Constants.SHARED_KEY_SORT_BY
 import com.envious.data.util.Filter
+import com.envious.data.util.Orientation
 import com.envious.data.util.Sort
 import com.envious.domain.usecase.GetCollectionsUseCase
 import com.envious.domain.usecase.SearchPhotoUseCase
@@ -22,7 +27,8 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val searchPhotoUseCase: SearchPhotoUseCase,
-    private val ioDispatchers: CoroutineDispatchers
+    private val ioDispatchers: CoroutineDispatchers,
+    private val sharedPreferences: SharedPreferences
 ) : BaseViewModel<Intent, State, Effect>(State()) {
 
     override fun onIntentReceived(intent: Intent) {
@@ -38,6 +44,16 @@ class SharedViewModel @Inject constructor(
             }
             is Intent.SearchPhoto -> {
                 searchPhotos(intent.query)
+            }
+            Intent.GetDefaultSetting -> {
+                getDefaultSettings()
+            }
+            is Intent.SetSettings -> {
+                setSettings(
+                    sort = intent.sort,
+                    orientation = intent.orientation,
+                    filter = intent.filter
+                )
             }
         }
     }
@@ -83,7 +99,7 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -127,7 +143,7 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -184,7 +200,7 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -229,7 +245,7 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Gagal menambahkan data baru"))
+                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -240,6 +256,35 @@ class SharedViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun getDefaultSettings() {
+        val keySort = sharedPreferences.getString(SHARED_KEY_SORT_BY, Sort.relevant.name)
+        val keyColor = sharedPreferences.getString(SHARED_KEY_COLOR, Filter.any.name)
+        val keyOrientation = sharedPreferences.getString(SHARED_KEY_ORIENTATION, Orientation.any.name)
+
+        setState {
+            copy(
+                sort = Sort.valueOf(keySort.orEmpty()),
+                filter = Filter.valueOf(keyColor.orEmpty()),
+                orientation = Orientation.valueOf(keyOrientation.orEmpty())
+            )
+        }
+    }
+
+    private fun setSettings(sort: String, filter: String, orientation: String) {
+        sharedPreferences.edit().putString(SHARED_KEY_SORT_BY, sort).apply()
+        sharedPreferences.edit().putString(SHARED_KEY_COLOR, filter).apply()
+        sharedPreferences.edit().putString(SHARED_KEY_ORIENTATION, orientation).apply()
+
+        setState {
+            copy(
+                sort = Sort.valueOf(sort),
+                filter = Filter.valueOf(filter),
+                orientation = Orientation.valueOf(orientation),
+                viewState = ViewState.BackToSearchResult
+            )
         }
     }
 }

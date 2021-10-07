@@ -10,7 +10,7 @@ object Versions {
     const val constraintLayout = "1.1.3"
     const val jUnit = "4.12"
     const val kotlin = "1.5.21"
-    const val hilt = "2.37"
+    const val hilt = "2.38.1"
     const val lifecycle = "2.4.0-rc01"
     const val arch = "2.1.0"
     const val core_ktx = "1.6.0"
