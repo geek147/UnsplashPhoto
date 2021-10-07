@@ -4,10 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,17 +12,13 @@ import com.envious.searchphoto.base.BaseFragment
 import com.envious.searchphoto.databinding.MainFragmentBinding
 import com.envious.searchphoto.ui.adapter.ItemAdapter
 import com.envious.searchphoto.ui.searchresult.SearchResultFragment
-import com.envious.searchphoto.util.Effect
 import com.envious.searchphoto.util.EndlessRecyclerViewScrollListener
 import com.envious.searchphoto.util.Intent
 import com.envious.searchphoto.util.State
 import com.envious.searchphoto.util.ViewState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class MainFragment : BaseFragment<Intent,
-    State,
-    Effect>() {
+    State>() {
 
     companion object {
         fun newInstance() = MainFragment()
@@ -46,8 +38,6 @@ class MainFragment : BaseFragment<Intent,
         savedInstanceState: Bundle?,
     ): View {
         _binding = MainFragmentBinding.inflate(layoutInflater)
-        setupRecyclerView()
-        viewModel.onIntentReceived(Intent.GetCollection)
 
         return binding.root
     }
@@ -58,16 +48,8 @@ class MainFragment : BaseFragment<Intent,
         viewModel.state.observe(viewLifecycleOwner) {
             invalidate(it)
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.effect.collect { effect ->
-                    effect?.getContentIfNotHandled()?.let {
-                        renderEffect(it)
-                    }
-                }
-            }
-        }
+        setupRecyclerView()
+        viewModel.onIntentReceived(Intent.GetCollection)
         setUpButtonSearch(view)
     }
 
@@ -165,18 +147,6 @@ class MainFragment : BaseFragment<Intent,
                     bundle.putString(SearchResultFragment.EXTRA_QUERY, textSearch.text.toString())
                     Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_searchResultFragment, bundle)
                 }
-            }
-        }
-    }
-
-    override fun renderEffect(effect: Effect) {
-        when (effect) {
-            is Effect.ShowToast -> {
-                Toast.makeText(
-                    requireContext(),
-                    effect.message,
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }

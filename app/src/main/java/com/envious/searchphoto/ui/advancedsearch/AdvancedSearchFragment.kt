@@ -5,10 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.envious.data.util.Filter
 import com.envious.data.util.Orientation
@@ -16,16 +12,12 @@ import com.envious.data.util.Sort
 import com.envious.searchphoto.R
 import com.envious.searchphoto.base.BaseFragment
 import com.envious.searchphoto.databinding.AdvancedSearchFragmentBinding
-import com.envious.searchphoto.util.Effect
 import com.envious.searchphoto.util.Intent
 import com.envious.searchphoto.util.State
 import com.envious.searchphoto.util.ViewState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class AdvancedSearchFragment : BaseFragment<Intent,
-    State,
-    Effect>() {
+    State>() {
 
     companion object {
         fun newInstance() = AdvancedSearchFragment()
@@ -43,7 +35,6 @@ class AdvancedSearchFragment : BaseFragment<Intent,
         savedInstanceState: Bundle?,
     ): View {
         _binding = AdvancedSearchFragmentBinding.inflate(layoutInflater)
-        viewModel.onIntentReceived(Intent.GetDefaultSetting)
         return binding.root
     }
 
@@ -54,15 +45,7 @@ class AdvancedSearchFragment : BaseFragment<Intent,
             invalidate(it)
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.effect.collect { effect ->
-                    effect?.getContentIfNotHandled()?.let {
-                        renderEffect(it)
-                    }
-                }
-            }
-        }
+        viewModel.onIntentReceived(Intent.GetDefaultSetting)
 
         setButtonSettings()
     }
@@ -171,26 +154,6 @@ class AdvancedSearchFragment : BaseFragment<Intent,
             }
 
             buttonCancel.setOnClickListener {
-                findNavController().popBackStack()
-            }
-        }
-    }
-
-    override fun renderEffect(effect: Effect) {
-        when (effect) {
-            is Effect.ShowToast -> {
-                Toast.makeText(
-                    requireContext(),
-                    effect.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            is Effect.ReturnToSearchResult -> {
-                Toast.makeText(
-                    requireContext(),
-                    effect.message,
-                    Toast.LENGTH_SHORT
-                ).show()
                 findNavController().popBackStack()
             }
         }

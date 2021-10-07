@@ -4,10 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,17 +11,13 @@ import com.envious.searchphoto.R
 import com.envious.searchphoto.base.BaseFragment
 import com.envious.searchphoto.databinding.SearchResultFragmentBinding
 import com.envious.searchphoto.ui.adapter.ItemAdapter
-import com.envious.searchphoto.util.Effect
 import com.envious.searchphoto.util.EndlessRecyclerViewScrollListener
 import com.envious.searchphoto.util.Intent
 import com.envious.searchphoto.util.State
 import com.envious.searchphoto.util.ViewState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class SearchResultFragment : BaseFragment<Intent,
-    State,
-    Effect>() {
+    State>() {
 
     companion object {
         val TAG = this::class.simpleName
@@ -60,10 +52,7 @@ class SearchResultFragment : BaseFragment<Intent,
         savedInstanceState: Bundle?,
     ): View {
         _binding = SearchResultFragmentBinding.inflate(layoutInflater)
-        setupRecyclerView()
         query = arguments?.getString(EXTRA_QUERY).orEmpty()
-        binding.textSearchResult.text = "Search Result : $query"
-        viewModel.onIntentReceived(Intent.SearchPhoto(query))
         return binding.root
     }
 
@@ -72,16 +61,9 @@ class SearchResultFragment : BaseFragment<Intent,
         viewModel.state.observe(viewLifecycleOwner) {
             invalidate(it)
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.effect.collect { effect ->
-                    effect?.getContentIfNotHandled()?.let {
-                        renderEffect(it)
-                    }
-                }
-            }
-        }
+        setupRecyclerView()
+        viewModel.onIntentReceived(Intent.SearchPhoto(query))
+        binding.textSearchResult.text = "Search Result : $query"
         setUpButtonSettings(view)
     }
 
@@ -167,18 +149,6 @@ class SearchResultFragment : BaseFragment<Intent,
                     recyclerview.visibility = View.VISIBLE
                     adapter.addData(state.listPhoto)
                 }
-            }
-        }
-    }
-
-    override fun renderEffect(effect: Effect) {
-        when (effect) {
-            is Effect.ShowToast -> {
-                Toast.makeText(
-                    requireContext(),
-                    effect.message,
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }

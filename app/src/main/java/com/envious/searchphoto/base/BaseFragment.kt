@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.envious.searchphoto.ui.viewmodel.SharedViewModel
 
-abstract class BaseFragment<Intent, State, Effect> :
+abstract class BaseFragment<Intent, State> :
     Fragment() {
 
     protected val viewModel: SharedViewModel by activityViewModels()
@@ -24,6 +24,4 @@ abstract class BaseFragment<Intent, State, Effect> :
     }
 
     abstract fun invalidate(state: State)
-
-    abstract fun renderEffect(effect: Effect)
 }

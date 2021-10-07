@@ -14,7 +14,6 @@ import com.envious.domain.usecase.GetCollectionsUseCase
 import com.envious.domain.usecase.SearchPhotoUseCase
 import com.envious.domain.util.Result
 import com.envious.searchphoto.base.BaseViewModel
-import com.envious.searchphoto.util.Effect
 import com.envious.searchphoto.util.Intent
 import com.envious.searchphoto.util.State
 import com.envious.searchphoto.util.ViewState
@@ -29,7 +28,7 @@ class SharedViewModel @Inject constructor(
     private val searchPhotoUseCase: SearchPhotoUseCase,
     private val ioDispatchers: CoroutineDispatchers,
     private val sharedPreferences: SharedPreferences
-) : BaseViewModel<Intent, State, Effect>(State()) {
+) : BaseViewModel<Intent, State>(State()) {
 
     override fun onIntentReceived(intent: Intent) {
         when (intent) {
@@ -99,7 +98,6 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -143,7 +141,6 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -200,7 +197,6 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
@@ -245,7 +241,6 @@ class SharedViewModel @Inject constructor(
                     }
                 }
                 is Result.Error -> {
-                    setEffect(Effect.ShowToast("Failed to add new data"))
                     setState {
                         copy(
                             listPhoto = emptyList(),
