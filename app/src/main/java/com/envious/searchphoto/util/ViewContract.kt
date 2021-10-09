@@ -10,7 +10,6 @@ sealed class Intent {
     data class SearchPhoto(val query: String) : Intent()
     data class LoadNextSearch(val page: Int) : Intent()
     data class LoadNextCollection(val page: Int) : Intent()
-    object GetDefaultSetting : Intent()
     data class SetSettings(val sort: String, val filter: String, val orientation: String) : Intent()
 }
 

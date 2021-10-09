@@ -10,5 +10,6 @@ interface SearchPhotoUseCase {
         limit: Int,
         orderBy: String,
         color: String,
+        orientation: String
     ): Result<List<Photo>>
 }

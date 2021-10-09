@@ -173,12 +173,14 @@ class SearchResultFragment : BaseFragment<Intent,
                 with(binding) {
                     recyclerview.visibility = View.VISIBLE
                     adapter.setList(state.listPhoto)
+                    errorView.visibility = View.GONE
                 }
             }
             ViewState.SuccessLoadMore -> {
                 with(binding) {
                     recyclerview.visibility = View.VISIBLE
                     adapter.addData(state.listPhoto)
+                    errorView.visibility = View.GONE
                 }
             }
         }

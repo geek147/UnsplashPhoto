@@ -44,9 +44,6 @@ class SharedViewModel @Inject constructor(
             is Intent.SearchPhoto -> {
                 searchPhotos(intent.query)
             }
-            Intent.GetDefaultSetting -> {
-                getDefaultSettings()
-            }
             is Intent.SetSettings -> {
                 setSettings(
                     sort = intent.sort,
@@ -58,9 +55,16 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun getCollection() {
+        val keySort = sharedPreferences.getString(SHARED_KEY_SORT_BY, Sort.relevant.name)
+        val keyColor = sharedPreferences.getString(SHARED_KEY_COLOR, Filter.any.name)
+        val keyOrientation = sharedPreferences.getString(SHARED_KEY_ORIENTATION, Orientation.any.name)
+
         setState {
             copy(
                 showLoading = true,
+                sort = Sort.valueOf(keySort.orEmpty()),
+                filter = Filter.valueOf(keyColor.orEmpty()),
+                orientation = Orientation.valueOf(keyOrientation.orEmpty())
             )
         }
 
@@ -71,7 +75,7 @@ class SharedViewModel @Inject constructor(
                         id = Constants.COLLECTION_DEFAULT_ID,
                         limit = 10,
                         page = 1,
-                        orientation = Constants.COLLECTION_DEFAULT_ORIENTATION
+                        orientation = state.value?.orientation?.name.orEmpty()
                     )
                 }
             ) {
@@ -121,7 +125,7 @@ class SharedViewModel @Inject constructor(
                         id = Constants.COLLECTION_DEFAULT_ID,
                         limit = 10,
                         page = page,
-                        orientation = Constants.COLLECTION_DEFAULT_ORIENTATION
+                        orientation = state.value?.orientation?.name.orEmpty()
                     )
                 }
             ) {
@@ -162,8 +166,9 @@ class SharedViewModel @Inject constructor(
                         query = query,
                         limit = 10,
                         page = 1,
-                        orderBy = Sort.relevant.name,
-                        color = Filter.black_and_white.name
+                        orderBy = state.value?.sort?.name.orEmpty(),
+                        color = state.value?.filter?.name.orEmpty(),
+                        orientation = state.value?.orientation?.name.orEmpty()
                     )
                 }
             ) {
@@ -213,8 +218,9 @@ class SharedViewModel @Inject constructor(
                         query = state.value?.query.orEmpty(),
                         limit = 10,
                         page = 1,
-                        orderBy = Sort.relevant.name,
-                        color = Filter.black_and_white.name
+                        orderBy = state.value?.sort?.name.orEmpty(),
+                        color = state.value?.filter?.name.orEmpty(),
+                        orientation = state.value?.orientation?.name.orEmpty()
                     )
                 }
             ) {
@@ -237,20 +243,6 @@ class SharedViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private fun getDefaultSettings() {
-        val keySort = sharedPreferences.getString(SHARED_KEY_SORT_BY, Sort.relevant.name)
-        val keyColor = sharedPreferences.getString(SHARED_KEY_COLOR, Filter.any.name)
-        val keyOrientation = sharedPreferences.getString(SHARED_KEY_ORIENTATION, Orientation.any.name)
-
-        setState {
-            copy(
-                sort = Sort.valueOf(keySort.orEmpty()),
-                filter = Filter.valueOf(keyColor.orEmpty()),
-                orientation = Orientation.valueOf(keyOrientation.orEmpty())
-            )
         }
     }
 

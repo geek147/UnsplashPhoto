@@ -15,8 +15,9 @@ interface PhotoApiService {
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("per_page") limit: Int,
-//        @Query("order_by") orderBy: String,
-//        @Query("color") color: String
+        @Query("order_by") orderBy: String,
+        @Query("color") color: String?,
+        @Query("orientation") orientation: String?,
     ): Response<SearchResponse>
 
     @GET("/collections/{id}/photos")
@@ -24,7 +25,7 @@ interface PhotoApiService {
         @Path("id") collectionId: Long,
         @Query("page") page: Int,
         @Query("per_page") limit: Int,
-//        @Query("orientation") orientation: String,
+        @Query("orientation") orientation: String?,
     ): Response<List<CollectionItem>>
 
     companion object {

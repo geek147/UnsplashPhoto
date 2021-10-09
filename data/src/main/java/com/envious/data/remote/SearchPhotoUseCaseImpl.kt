@@ -16,13 +16,15 @@ class SearchPhotoUseCaseImpl @Inject constructor(
         limit: Int,
         orderBy: String,
         color: String,
+        orientation: String
     ): Result<List<Photo>> {
         return repository.searchPhotos(
             query = query,
             page = page,
             limit = limit,
             orderBy = orderBy,
-            color = color
+            color = color,
+            orientation = orientation
         )
     }
 }

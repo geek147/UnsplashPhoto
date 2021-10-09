@@ -4,6 +4,8 @@ import android.util.Log
 import com.envious.data.mapper.CollectionItemRemoteMapper
 import com.envious.data.mapper.PhotoItemRemoteMapper
 import com.envious.data.remote.PhotoApiService
+import com.envious.data.util.Filter
+import com.envious.data.util.Orientation
 import com.envious.domain.model.Photo
 import com.envious.domain.repository.PhotoRepository
 import com.envious.domain.util.Result
@@ -19,14 +21,19 @@ class PhotoRepositoryImpl @Inject constructor(
         limit: Int,
         orderBy: String,
         color: String,
+        orientation: String
     ): Result<List<Photo>> {
         return try {
+            val newColor = if (color == Filter.any.name) null else color
+            val newOrientation = if (orientation == Orientation.any.name) null else orientation
+
             val result = photoApiService.searchPhoto(
                 query = query,
                 page = page,
                 limit = limit,
-//            orderBy = orderBy,
-//            color = color
+                orderBy = orderBy,
+                color = newColor,
+                orientation = newOrientation
             )
             if (result.isSuccessful) {
                 val remoteMapper = PhotoItemRemoteMapper()
@@ -57,10 +64,12 @@ class PhotoRepositoryImpl @Inject constructor(
         orientation: String,
     ): Result<List<Photo>> {
         return try {
+            val newOrientation = if (orientation == Orientation.any.name) null else orientation
             val result = photoApiService.getCollections(
                 collectionId = id,
                 page = page,
-                limit = limit
+                limit = limit,
+                orientation = newOrientation
             )
             return if (result.isSuccessful) {
                 val remoteMapper = CollectionItemRemoteMapper()

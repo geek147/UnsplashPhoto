@@ -9,7 +9,8 @@ interface PhotoRepository {
         page: Int,
         limit: Int,
         orderBy: String,
-        color: String
+        color: String,
+        orientation: String
     ): Result<List<Photo>>
 
     suspend fun getCollections(

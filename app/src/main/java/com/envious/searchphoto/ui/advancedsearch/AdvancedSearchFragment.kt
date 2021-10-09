@@ -60,8 +60,6 @@ class AdvancedSearchFragment : BaseFragment<Intent,
             invalidate(it)
         }
 
-        viewModel.onIntentReceived(Intent.GetDefaultSetting)
-
         setButtonSettings()
     }
 
