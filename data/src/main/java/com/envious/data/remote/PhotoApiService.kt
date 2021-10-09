@@ -14,7 +14,7 @@ interface PhotoApiService {
     suspend fun searchPhoto(
         @Query("query") query: String,
         @Query("page") page: Int,
-//        @Query("per_page") limit: Int,
+        @Query("per_page") limit: Int,
 //        @Query("order_by") orderBy: String,
 //        @Query("color") color: String
     ): Response<SearchResponse>
@@ -23,7 +23,7 @@ interface PhotoApiService {
     suspend fun getCollections(
         @Path("id") collectionId: Long,
         @Query("page") page: Int,
-//        @Query("per_page") limit: Int,
+        @Query("per_page") limit: Int,
 //        @Query("orientation") orientation: String,
     ): Response<List<CollectionItem>>
 

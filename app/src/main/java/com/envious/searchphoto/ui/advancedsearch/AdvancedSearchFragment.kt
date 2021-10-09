@@ -2,10 +2,15 @@ package com.envious.searchphoto.ui.advancedsearch
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.Nullable
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.envious.data.util.Filter
 import com.envious.data.util.Orientation
 import com.envious.data.util.Sort
@@ -35,7 +40,17 @@ class AdvancedSearchFragment : BaseFragment<Intent,
         savedInstanceState: Bundle?,
     ): View {
         _binding = AdvancedSearchFragmentBinding.inflate(layoutInflater)
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // handle the up button here
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            requireView().findNavController()
+        ) ||
+            super.onOptionsItemSelected(item)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,6 +120,21 @@ class AdvancedSearchFragment : BaseFragment<Intent,
                 findNavController().popBackStack()
             }
         }
+    }
+
+    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // This callback will only be called when MyFragment is at least Started.
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+        // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
     private fun setButtonSettings() {

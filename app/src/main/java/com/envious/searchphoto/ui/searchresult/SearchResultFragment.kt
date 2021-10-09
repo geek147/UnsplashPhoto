@@ -2,9 +2,15 @@ package com.envious.searchphoto.ui.searchresult
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.Nullable
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.envious.searchphoto.R
@@ -53,7 +59,17 @@ class SearchResultFragment : BaseFragment<Intent,
     ): View {
         _binding = SearchResultFragmentBinding.inflate(layoutInflater)
         query = arguments?.getString(EXTRA_QUERY).orEmpty()
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // handle the up button here
+        return NavigationUI.onNavDestinationSelected(
+            item,
+            requireView().findNavController()
+        ) ||
+            super.onOptionsItemSelected(item)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,6 +86,21 @@ class SearchResultFragment : BaseFragment<Intent,
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // This callback will only be called when MyFragment is at least Started.
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+        // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
     private fun setupRecyclerView() {

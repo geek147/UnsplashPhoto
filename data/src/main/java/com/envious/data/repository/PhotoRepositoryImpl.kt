@@ -1,5 +1,6 @@
 package com.envious.data.repository
 
+import android.util.Log
 import com.envious.data.mapper.CollectionItemRemoteMapper
 import com.envious.data.mapper.PhotoItemRemoteMapper
 import com.envious.data.remote.PhotoApiService
@@ -19,28 +20,33 @@ class PhotoRepositoryImpl @Inject constructor(
         orderBy: String,
         color: String,
     ): Result<List<Photo>> {
-        val result = photoApiService.searchPhoto(
-            query = query,
-            page = page,
-//            limit = limit,
+        return try {
+            val result = photoApiService.searchPhoto(
+                query = query,
+                page = page,
+                limit = limit,
 //            orderBy = orderBy,
 //            color = color
-        )
-        if (result.isSuccessful) {
-            val remoteMapper = PhotoItemRemoteMapper()
-            val remoteData = result.body()
-            val items = remoteData?.photoItems
-            return if (remoteData != null && !items.isNullOrEmpty()) {
-                val listData = mutableListOf<Photo>()
-                items.forEach {
-                    listData.add(remoteMapper.transform(it!!))
+            )
+            if (result.isSuccessful) {
+                val remoteMapper = PhotoItemRemoteMapper()
+                val remoteData = result.body()
+                val items = remoteData?.photoItems
+                return if (remoteData != null && !items.isNullOrEmpty()) {
+                    val listData = mutableListOf<Photo>()
+                    items.forEach {
+                        listData.add(remoteMapper.transform(it!!))
+                    }
+                    Result.Success(listData)
+                } else {
+                    Result.Success(emptyList())
                 }
-                Result.Success(listData)
             } else {
-                Result.Success(emptyList())
+                return Result.Error(Exception("Invalid data/failure"))
             }
-        } else {
-            return Result.Error(Exception("Invalid data/failure"))
+        } catch (e: Exception) {
+            Log.e("ApiCalls", "Call error: ${e.localizedMessage}", e.cause)
+            Result.Error(Exception("Invalid data/failure"))
         }
     }
 
@@ -50,23 +56,29 @@ class PhotoRepositoryImpl @Inject constructor(
         limit: Int,
         orientation: String,
     ): Result<List<Photo>> {
-        val result = photoApiService.getCollections(
-            collectionId = id,
-            page = page
-        )
-        return if (result.isSuccessful) {
-            val remoteMapper = CollectionItemRemoteMapper()
-            val remoteData = result.body()
-            if (remoteData != null && !remoteData.isNullOrEmpty()) {
-                val listData = mutableListOf<Photo>()
-                remoteData.forEach {
-                    listData.add(remoteMapper.transform(it))
+        return try {
+            val result = photoApiService.getCollections(
+                collectionId = id,
+                page = page,
+                limit = limit
+            )
+            return if (result.isSuccessful) {
+                val remoteMapper = CollectionItemRemoteMapper()
+                val remoteData = result.body()
+                if (remoteData != null && !remoteData.isNullOrEmpty()) {
+                    val listData = mutableListOf<Photo>()
+                    remoteData.forEach {
+                        listData.add(remoteMapper.transform(it))
+                    }
+                    Result.Success(listData)
+                } else {
+                    Result.Success(emptyList())
                 }
-                Result.Success(listData)
             } else {
-                Result.Success(emptyList())
+                Result.Error(Exception("Invalid data/failure"))
             }
-        } else {
+        } catch (e: Exception) {
+            Log.e("ApiCalls", "Call error: ${e.localizedMessage}", e.cause)
             Result.Error(Exception("Invalid data/failure"))
         }
     }

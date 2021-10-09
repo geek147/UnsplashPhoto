@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.envious.searchphoto.ui.main.MainFragment"
-        android:label="main_fragment"
+        android:label="Colletion Photo"
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_mainFragment_to_searchResultFragment"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.envious.searchphoto.ui.detail.DetailFragment"
-        android:label="fragment_detail"
+        android:label="Detail Photo"
         tools:layout="@layout/fragment_detail" >
         <argument
             android:name="urlPhoto"
@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/searchResultFragment"
         android:name="com.envious.searchphoto.ui.searchresult.SearchResultFragment"
-        android:label="search_result_fragment"
+        android:label="Search Photo"
         tools:layout="@layout/search_result_fragment" >
         <action
             android:id="@+id/action_searchResultFragment_to_advancedSearchFragment"
@@ -64,6 +64,6 @@
     <fragment
         android:id="@+id/advancedSearchFragment"
         android:name="com.envious.searchphoto.ui.advancedsearch.AdvancedSearchFragment"
-        android:label="advanced_search_fragment"
+        android:label="Advanced Search Setting"
         tools:layout="@layout/advanced_search_fragment" />
 </navigation>
