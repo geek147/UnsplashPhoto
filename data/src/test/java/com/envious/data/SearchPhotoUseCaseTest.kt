@@ -1,6 +1,7 @@
 package com.envious.data
 
 import com.envious.data.remote.SearchPhotoUseCaseImpl
+import com.envious.data.util.Constants
 import com.envious.domain.model.Photo
 import com.envious.domain.repository.PhotoRepository
 import com.envious.domain.util.Result
@@ -31,9 +32,10 @@ class SearchPhotoUseCaseTest {
         val limit: Int = 10
         val order: String = "latest"
         val color = "black"
+        val orientation: String = Constants.COLLECTION_DEFAULT_ORIENTATION
 
         coEvery {
-            repository.searchPhotos(any(), any(), any(), any(), any())
+            repository.searchPhotos(any(), any(), any(), any(), any(), any())
         } returns Result.Success(emptyList)
 
         runBlockingTest {
@@ -42,7 +44,8 @@ class SearchPhotoUseCaseTest {
                 limit = limit,
                 query = query,
                 orderBy = order,
-                color = color
+                color = color,
+                orientation = orientation
             )
         }
 
@@ -52,7 +55,8 @@ class SearchPhotoUseCaseTest {
                 limit = limit,
                 query = query,
                 orderBy = order,
-                color = color
+                color = color,
+                orientation = orientation
             )
         }
     }

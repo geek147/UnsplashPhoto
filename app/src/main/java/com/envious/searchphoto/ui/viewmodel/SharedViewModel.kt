@@ -85,7 +85,7 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = emptyList(),
                                 showLoading = false,
-                                viewState = ViewState.EmptyList
+                                viewState = ViewState.EmptyListFirstInit
                             )
                         }
                     } else {
@@ -178,7 +178,7 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = emptyList(),
                                 showLoading = false,
-                                viewState = ViewState.EmptyList
+                                viewState = ViewState.EmptyListFirstInit
                             )
                         }
                     } else {

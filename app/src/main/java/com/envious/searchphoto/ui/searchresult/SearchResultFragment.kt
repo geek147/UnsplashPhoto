@@ -132,7 +132,7 @@ class SearchResultFragment : BaseFragment<Intent,
         }
 
         when (state.viewState) {
-            ViewState.EmptyList -> {
+            ViewState.EmptyListFirstInit -> {
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {

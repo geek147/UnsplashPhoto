@@ -38,7 +38,7 @@ class PhotoRepositoryTest {
     fun verify_getCollection_call() {
 
         coEvery {
-            apiService.getCollections(any(), any(), any())
+            apiService.getCollections(any(), any(), any(), any())
         } returns Response.success(
             listOf(
                 CollectionItem()
@@ -50,7 +50,7 @@ class PhotoRepositoryTest {
         }
 
         coVerify {
-            apiService.getCollections(id, page, limit)
+            apiService.getCollections(id, page, limit, orientation)
         }
     }
 
@@ -58,17 +58,17 @@ class PhotoRepositoryTest {
     fun verify_searchPhoto_call() {
 
         coEvery {
-            apiService.searchPhoto(any(), any(), any())
+            apiService.searchPhoto(any(), any(), any(), any(), any(), any())
         } returns Response.success(
             SearchResponse()
         )
 
         runBlockingTest {
-            repositoryTest.searchPhotos(query, page, limit, orderBy, filter)
+            repositoryTest.searchPhotos(query, page, limit, orderBy, filter, orientation)
         }
 
         coVerify {
-            apiService.searchPhoto(query, page, limit)
+            apiService.searchPhoto(query, page, limit, orderBy, filter, orientation)
         }
     }
 }

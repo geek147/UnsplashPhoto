@@ -91,7 +91,7 @@ class MainFragment : BaseFragment<Intent,
         }
 
         when (state.viewState) {
-            ViewState.EmptyList -> {
+            ViewState.EmptyListFirstInit -> {
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
@@ -142,6 +142,7 @@ class MainFragment : BaseFragment<Intent,
                     errorView.visibility = View.GONE
                 }
             }
+            ViewState.BackToSearchResult -> {}
         }
     }
 

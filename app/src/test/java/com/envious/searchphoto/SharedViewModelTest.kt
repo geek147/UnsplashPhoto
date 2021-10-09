@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.envious.data.dispatchers.CoroutineDispatchers
+import com.envious.data.util.Constants
 import com.envious.domain.model.Photo
 import com.envious.domain.usecase.GetCollectionsUseCase
 import com.envious.domain.usecase.SearchPhotoUseCase
@@ -98,6 +99,18 @@ class SharedViewModelTest {
             getCollection(any(), any(), any(), any())
         } returns Result.Success(listOf(photo))
 
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_SORT_BY, "relevant")
+        } returns "relevant"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_COLOR, "any")
+        } returns "any"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_ORIENTATION, "any")
+        } returns "any"
+
         viewModel.onIntentReceived(
             Intent.GetCollection
         )
@@ -115,6 +128,18 @@ class SharedViewModelTest {
         coEvery {
             getCollection(any(), any(), any(), any())
         } returns Result.Success(listOf(photo))
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_SORT_BY, "relevant")
+        } returns "relevant"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_COLOR, "any")
+        } returns "any"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_ORIENTATION, "any")
+        } returns "any"
 
         viewModel.onIntentReceived(
             Intent.GetCollection
@@ -138,12 +163,24 @@ class SharedViewModelTest {
             emptyList()
         )
 
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_SORT_BY, "relevant")
+        } returns "relevant"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_COLOR, "any")
+        } returns "any"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_ORIENTATION, "any")
+        } returns "any"
+
         viewModel.onIntentReceived(
             Intent.GetCollection
         )
 
         assertEquals(observedStateList.last().showLoading, false)
-        assertEquals(observedStateList.last().viewState, ViewState.EmptyList)
+        assertEquals(observedStateList.last().viewState, ViewState.EmptyListFirstInit)
     }
 
     @Test
@@ -156,6 +193,18 @@ class SharedViewModelTest {
         coEvery {
             getCollection(any(), any(), any(), any())
         } returns Result.Error(Exception("Invalid data/failure"))
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_SORT_BY, "relevant")
+        } returns "relevant"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_COLOR, "any")
+        } returns "any"
+
+        coEvery {
+            sharedPreferences.getString(Constants.SHARED_KEY_ORIENTATION, "any")
+        } returns "any"
 
         viewModel.onIntentReceived(
             Intent.GetCollection
@@ -187,7 +236,7 @@ class SharedViewModelTest {
         } returns testDispatcher
 
         coEvery {
-            searchPhotos(any(), any(), any(), any(), any())
+            searchPhotos(any(), any(), any(), any(), any(), any())
         } returns Result.Success(listOf(photo))
 
         viewModel.onIntentReceived(
@@ -207,7 +256,7 @@ class SharedViewModelTest {
         } returns testDispatcher
 
         coEvery {
-            searchPhotos(any(), any(), any(), any(), any())
+            searchPhotos(any(), any(), any(), any(), any(), any())
         } returns Result.Success(
             emptyList()
         )
@@ -217,7 +266,7 @@ class SharedViewModelTest {
         )
 
         assertEquals(observedStateList.last().showLoading, false)
-        assertEquals(observedStateList.last().viewState, ViewState.EmptyList)
+        assertEquals(observedStateList.last().viewState, ViewState.EmptyListFirstInit)
     }
 
     @Test
@@ -228,7 +277,7 @@ class SharedViewModelTest {
         } returns testDispatcher
 
         coEvery {
-            searchPhotos(any(), any(), any(), any(), any())
+            searchPhotos(any(), any(), any(), any(), any(), any())
         } returns Result.Error(Exception("Invalid data/failure"))
 
         viewModel.onIntentReceived(

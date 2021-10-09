@@ -31,7 +31,7 @@ sealed class Effect {
 sealed class ViewState {
     object Idle : ViewState()
     object SuccessFirstInit : ViewState()
-    object EmptyList : ViewState()
+    object EmptyListFirstInit : ViewState()
     object SuccessLoadMore : ViewState()
     object ErrorFirstInit : ViewState()
     object ErrorLoadMore : ViewState()
