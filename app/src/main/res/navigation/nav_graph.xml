@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.envious.searchphoto.ui.main.MainFragment"
-        android:label="Colletion Photo"
+        android:label="Collection Photo"
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_mainFragment_to_searchResultFragment"

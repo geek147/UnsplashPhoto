@@ -91,7 +91,6 @@ class SearchResultFragment : BaseFragment<Intent,
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This callback will only be called when MyFragment is at least Started.
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -99,8 +98,6 @@ class SearchResultFragment : BaseFragment<Intent,
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
-        // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
     private fun setupRecyclerView() {
@@ -109,7 +106,7 @@ class SearchResultFragment : BaseFragment<Intent,
             val gridLayoutManager = GridLayoutManager(requireContext(), 2)
             recyclerview.layoutManager = gridLayoutManager
             recyclerview.itemAnimator = null
-            adapter = ItemAdapter(requireContext())
+            adapter = ItemAdapter(requireContext(), true)
             adapter.setHasStableIds(true)
             recyclerview.adapter = adapter
             scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -144,10 +141,14 @@ class SearchResultFragment : BaseFragment<Intent,
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
-                        showError(
+                        setUpErrorView(
                             title = resources.getString(R.string.empty_state_title),
                             message = resources.getString(R.string.empty_state_message)
                         )
+                        binding.buttonRetry.setOnClickListener {
+                            currentPage = 1
+                            viewModel.onIntentReceived(Intent.SearchPhoto(query))
+                        }
                     }
                     adapter.setList(emptyList())
                     recyclerview.visibility = View.GONE
@@ -157,7 +158,11 @@ class SearchResultFragment : BaseFragment<Intent,
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
-                        showError()
+                        setUpErrorView()
+                        binding.buttonRetry.setOnClickListener {
+                            currentPage = 1
+                            viewModel.onIntentReceived(Intent.SearchPhoto(query))
+                        }
                     }
                     adapter.setList(emptyList())
                     recyclerview.visibility = View.GONE

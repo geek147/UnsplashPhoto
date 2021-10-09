@@ -14,9 +14,9 @@ class ErrorStateView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val binding = ErrorViewBinding.inflate(LayoutInflater.from(context), this, true)
+    val binding = ErrorViewBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun showError(
+    fun setUpErrorView(
         title: String = resources.getString(R.string.error_state_title),
         message: String = resources.getString(R.string.error_state_message),
     ) {

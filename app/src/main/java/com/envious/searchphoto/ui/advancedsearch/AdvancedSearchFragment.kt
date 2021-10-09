@@ -125,7 +125,6 @@ class AdvancedSearchFragment : BaseFragment<Intent,
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This callback will only be called when MyFragment is at least Started.
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true /* enabled by default */) {
                 override fun handleOnBackPressed() {
@@ -133,8 +132,6 @@ class AdvancedSearchFragment : BaseFragment<Intent,
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
-        // The callback can be enabled or disabled here or in handleOnBackPressed()
     }
 
     private fun setButtonSettings() {

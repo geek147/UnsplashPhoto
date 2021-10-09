@@ -1,16 +1,19 @@
 package com.envious.searchphoto.ui.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.envious.data.local.imagecache.ImageLoader
 import com.envious.domain.model.Photo
 import com.envious.searchphoto.R
 import com.envious.searchphoto.databinding.ListItemRowBinding
+import com.envious.searchphoto.ui.detail.DetailFragment
 
-class ItemAdapter(private val context: Context) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val context: Context, private val isSearchResult: Boolean) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
     private var listItem: MutableList<Photo> = mutableListOf()
     private val guidToIdMap = GuidToIdMap()
 
@@ -39,6 +42,15 @@ class ItemAdapter(private val context: Context) : RecyclerView.Adapter<ItemAdapt
     override fun onBindViewHolder(holderItem: ItemViewHolder, position: Int) {
         with(holderItem) {
             ImageLoader.with(context).load(binding.ivMoviePoster, listItem[position].urls.regular)
+            holderItem.binding.ivMoviePoster.setOnClickListener {
+                val bundle = Bundle()
+                bundle.putString(DetailFragment.EXTRA_IMAGE_URL, listItem[position].urls.regular)
+                if (isSearchResult) {
+                    Navigation.findNavController(view).navigate(R.id.action_searchResultFragment_to_detailFragment, bundle)
+                } else {
+                    Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_detailFragment, bundle)
+                }
+            }
         }
     }
 

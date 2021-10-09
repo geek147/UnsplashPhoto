@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.envious.searchphoto.R
@@ -66,7 +65,7 @@ class MainFragment : BaseFragment<Intent,
             val gridLayoutManager = GridLayoutManager(requireContext(), 2)
             recyclerview.layoutManager = gridLayoutManager
             recyclerview.itemAnimator = null
-            adapter = ItemAdapter(requireContext())
+            adapter = ItemAdapter(requireContext(), false)
             adapter.setHasStableIds(true)
             recyclerview.adapter = adapter
             scrollListener = object : EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -101,10 +100,14 @@ class MainFragment : BaseFragment<Intent,
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
-                        showError(
+                        setUpErrorView(
                             title = resources.getString(R.string.empty_state_title),
                             message = resources.getString(R.string.empty_state_message)
                         )
+                        binding.buttonRetry.setOnClickListener {
+                            currentPage = 1
+                            viewModel.onIntentReceived(Intent.GetCollection)
+                        }
                     }
                     adapter.setList(emptyList())
                     recyclerview.visibility = View.GONE
@@ -114,7 +117,11 @@ class MainFragment : BaseFragment<Intent,
                 with(binding) {
                     errorView.visibility = View.VISIBLE
                     errorView.run {
-                        showError()
+                        setUpErrorView()
+                        binding.buttonRetry.setOnClickListener {
+                            currentPage = 1
+                            viewModel.onIntentReceived(Intent.GetCollection)
+                        }
                     }
                     adapter.setList(emptyList())
                     recyclerview.visibility = View.GONE

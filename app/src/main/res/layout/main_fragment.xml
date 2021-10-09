@@ -26,6 +26,7 @@
             android:id="@+id/textSearch"
             android:hint="Search"
             android:backgroundTint="@color/white"
+            android:lines="1"
             />
 
         <androidx.appcompat.widget.AppCompatImageButton
