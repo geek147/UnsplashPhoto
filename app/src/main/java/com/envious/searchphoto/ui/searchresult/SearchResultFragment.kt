@@ -129,11 +129,6 @@ class SearchResultFragment : BaseFragment<Intent,
     override fun invalidate(state: State) {
         with(binding) {
             pgProgressList.visibility = if (state.showLoading) View.VISIBLE else View.GONE
-            errorView.visibility = if (state.showError) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
         }
 
         when (state.viewState) {

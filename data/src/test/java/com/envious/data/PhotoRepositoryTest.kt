@@ -35,7 +35,7 @@ class PhotoRepositoryTest {
     }
 
     @Test
-    fun getCollection_returnSuccessPhotos() {
+    fun verify_getCollection_call() {
 
         coEvery {
             apiService.getCollections(any(), any(), any())
@@ -55,7 +55,7 @@ class PhotoRepositoryTest {
     }
 
     @Test
-    fun searchPhoto_returnSuccessPhotos() {
+    fun verify_searchPhoto_call() {
 
         coEvery {
             apiService.searchPhoto(any(), any(), any())

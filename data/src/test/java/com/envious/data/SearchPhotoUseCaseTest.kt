@@ -1,7 +1,6 @@
 package com.envious.data
 
-import com.envious.data.remote.GetCollectionUseCaseImpl
-import com.envious.data.util.Constants
+import com.envious.data.remote.SearchPhotoUseCaseImpl
 import com.envious.domain.model.Photo
 import com.envious.domain.repository.PhotoRepository
 import com.envious.domain.util.Result
@@ -14,43 +13,46 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class GetCollectionUseCaseTest {
+class SearchPhotoUseCaseTest {
 
     private val repository: PhotoRepository = mockk()
-    private var getCollection: GetCollectionUseCaseImpl = mockk()
+    private var searchPhotoUseCase: SearchPhotoUseCaseImpl = mockk()
 
     @Before
     fun setUp() {
-        getCollection = GetCollectionUseCaseImpl(repository)
+        searchPhotoUseCase = SearchPhotoUseCaseImpl(repository)
     }
 
     @Test
-    fun verify_getCollection_call_getPhotoRepository() {
+    fun verify_searchPhotoUseCase_call_getPhotoRepository() {
         val emptyList = emptyList<Photo>()
-        val id: Long = Constants.COLLECTION_DEFAULT_ID
+        val query: String = "ABC"
         val page: Int = 1
         val limit: Int = 10
-        val orientation: String = Constants.COLLECTION_DEFAULT_ORIENTATION
+        val order: String = "latest"
+        val color = "black"
 
         coEvery {
-            repository.getCollections(any(), any(), any(), any())
+            repository.searchPhotos(any(), any(), any(), any(), any())
         } returns Result.Success(emptyList)
 
         runBlockingTest {
-            getCollection(
-                id = id,
+            searchPhotoUseCase(
                 page = page,
                 limit = limit,
-                orientation = orientation
+                query = query,
+                orderBy = order,
+                color = color
             )
         }
 
         coVerify {
-            repository.getCollections(
-                id = id,
+            repository.searchPhotos(
                 page = page,
                 limit = limit,
-                orientation = orientation
+                query = query,
+                orderBy = order,
+                color = color
             )
         }
     }

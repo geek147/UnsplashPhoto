@@ -61,7 +61,6 @@ class SharedViewModel @Inject constructor(
         setState {
             copy(
                 showLoading = true,
-                showError = false
             )
         }
 
@@ -82,7 +81,6 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = emptyList(),
                                 showLoading = false,
-                                showError = false,
                                 viewState = ViewState.EmptyList
                             )
                         }
@@ -91,7 +89,6 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = result.data,
                                 showLoading = false,
-                                showError = false,
                                 viewState = ViewState.SuccessFirstInit
                             )
                         }
@@ -102,7 +99,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = emptyList(),
                             showLoading = false,
-                            showError = true,
                             viewState = ViewState.ErrorFirstInit
                         )
                     }
@@ -115,7 +111,6 @@ class SharedViewModel @Inject constructor(
         setState {
             copy(
                 showLoading = true,
-                showError = false
             )
         }
 
@@ -135,7 +130,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = result.data,
                             showLoading = false,
-                            showError = false,
                             viewState = ViewState.SuccessLoadMore
                         )
                     }
@@ -145,7 +139,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = emptyList(),
                             showLoading = false,
-                            showError = true,
                             viewState = ViewState.ErrorLoadMore
                         )
                     }
@@ -158,7 +151,6 @@ class SharedViewModel @Inject constructor(
         setState {
             copy(
                 showLoading = true,
-                showError = false,
                 query = query
             )
         }
@@ -181,7 +173,6 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = emptyList(),
                                 showLoading = false,
-                                showError = false,
                                 viewState = ViewState.EmptyList
                             )
                         }
@@ -190,7 +181,6 @@ class SharedViewModel @Inject constructor(
                             copy(
                                 listPhoto = result.data,
                                 showLoading = false,
-                                showError = false,
                                 viewState = ViewState.SuccessFirstInit
                             )
                         }
@@ -201,7 +191,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = emptyList(),
                             showLoading = false,
-                            showError = true,
                             viewState = ViewState.ErrorFirstInit
                         )
                     }
@@ -214,7 +203,6 @@ class SharedViewModel @Inject constructor(
         setState {
             copy(
                 showLoading = true,
-                showError = false
             )
         }
 
@@ -235,7 +223,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = result.data,
                             showLoading = false,
-                            showError = false,
                             viewState = ViewState.SuccessLoadMore
                         )
                     }
@@ -245,7 +232,6 @@ class SharedViewModel @Inject constructor(
                         copy(
                             listPhoto = emptyList(),
                             showLoading = false,
-                            showError = true,
                             viewState = ViewState.ErrorLoadMore
                         )
                     }

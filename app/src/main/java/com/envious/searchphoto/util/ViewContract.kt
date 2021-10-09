@@ -16,7 +16,6 @@ sealed class Intent {
 
 data class State(
     val showLoading: Boolean = false,
-    val showError: Boolean = false,
     val listPhoto: List<Photo> = listOf(),
     val viewState: ViewState = ViewState.Idle,
     val query: String = "",

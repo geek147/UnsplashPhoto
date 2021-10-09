@@ -46,7 +46,7 @@ class PhotoRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("ApiCalls", "Call error: ${e.localizedMessage}", e.cause)
-            Result.Error(Exception("Invalid data/failure"))
+            Result.Error(Exception(e.cause))
         }
     }
 
